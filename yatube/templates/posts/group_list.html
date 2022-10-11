@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Записи сообщества {{ group.title }}
+{% endblock %} 
+
+
+
+{% block content %}
+<main class="container py-5">
+  <h1>{{ group.title }}</h1>
+  <p>{{ group.description }}</p>
+
+  {% if page_obj.has_other_pages %}
+    <p>Отображены записи {{ page_obj.start_index }}-{{ page_obj.end_index }} 
+      из {{ page_obj.paginator.count }}.</p>
+  {% else %}
+    <p>Отображены все записи этой группы.</p>
+  {% endif %}
+  
+  {% for post in page_obj %}
+    {% include 'posts/post_card.html' %}   
+    {% if not forloop.last %}<hr>{% endif %}
+  {% endfor %} 
+
+  {% include 'posts/includes/paginator.html' %}
+
+</main>
+{% endblock %}

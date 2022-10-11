@@ -1,0 +1,14 @@
+{% extends "users/password_base.html" %}
+{% block title %}Войти{% endblock %}
+{% block card_header %}Войти на сайт{% endblock %}
+
+{% block card_body %}
+  {% include 'users/form_output.html' %}
+      Войти
+    </button>
+    <a href="{% url 'users:password_reset' %}" class="btn btn-link">
+      Забыли пароль?
+    </a>
+    </div>
+  </form>
+{% endblock %} 
