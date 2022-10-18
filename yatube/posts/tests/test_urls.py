@@ -100,3 +100,19 @@ class StaticURLTests(TestCase):
         """Несуществующий url возвращает код 404."""
         response = self.guest_client.get('/unexisting_page/')
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
+
+    def test_unauthorized_user_cannot_leave_comments(self):
+        """Аноним не может оставлять комментарии."""
+        form_data = {
+            'text': 'Тестовый комментарий',
+            'author': StaticURLTests.user,
+        }
+        response = self.guest_client.post(
+            reverse('posts:add_comment', kwargs={'post_id': 1}),
+            data=form_data,
+        )
+        self.assertRedirects(
+            response,
+            reverse('users:login')
+            + '?next=' + reverse('posts:add_comment', kwargs={'post_id': 1})
+        )

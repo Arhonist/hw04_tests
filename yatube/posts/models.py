@@ -44,3 +44,21 @@ class Group(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Comment(models.Model):
+    post = models.ForeignKey(
+        Post,
+        related_name='comments',
+        on_delete=models.CASCADE,
+    )
+    author = models.ForeignKey(
+        User,
+        related_name='comments',
+        on_delete=models.CASCADE,
+    )
+    text = models.TextField(
+        verbose_name='Текст комментария',
+        help_text='Текст нового комментария',
+    )
+    created = models.DateTimeField(auto_now_add=True)
