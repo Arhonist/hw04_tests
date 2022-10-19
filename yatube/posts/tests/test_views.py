@@ -5,6 +5,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase, override_settings
 from django.conf import settings
+from django.core.cache import cache
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 
@@ -150,6 +151,13 @@ class PostPagesTests(TestCase):
         self.assertEqual(object_1.group, PostPagesTests.group)
         # Проверяем, что на странице группы testslug2 нет поста с testslug
         self.assertNotIn(object_1, list(response_2.context['page_obj']))
+
+    def test_index_page_cache_works(self):
+        """На главной странице работает кэширование списка записей."""
+        response = self.authorized_client.get(
+            reverse('posts:index')
+        )
+        self.assertTrue(cache.get('index_page'))
 
 
 class PaginatorTestView(TestCase):
