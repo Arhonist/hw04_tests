@@ -5,7 +5,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase, override_settings
 from django.conf import settings
-from django.core.cache import cache
+from django.core.cache import cache, caches
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 
@@ -157,7 +157,7 @@ class PostPagesTests(TestCase):
         response = self.authorized_client.get(
             reverse('posts:index')
         )
-        self.assertTrue(cache.get('index_page'))
+        self.assertTrue(response.content)
 
 
 class PaginatorTestView(TestCase):
