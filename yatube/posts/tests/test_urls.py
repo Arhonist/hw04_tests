@@ -101,6 +101,13 @@ class StaticURLTests(TestCase):
         response = self.guest_client.get('/unexisting_page/')
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
+    def test_404_page_uses_custom_template(self):
+        """Страница 404 отдаёт кастомный шаблон."""
+        self.assertTemplateUsed(
+            self.authorized_client.get('/unexisting_page/'),
+            'core/404.html'
+        )
+
     def test_unauthorized_user_cannot_leave_comments(self):
         """Аноним не может оставлять комментарии."""
         form_data = {

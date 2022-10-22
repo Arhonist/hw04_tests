@@ -5,7 +5,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase, override_settings
 from django.conf import settings
-from django.core.cache import cache, caches
+from django.core.cache import cache
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 
@@ -154,10 +154,15 @@ class PostPagesTests(TestCase):
 
     def test_index_page_cache_works(self):
         """На главной странице работает кэширование списка записей."""
-        response = self.authorized_client.get(
-            reverse('posts:index')
-        )
-        self.assertTrue(response.content)
+        response_1 = self.authorized_client.get(reverse('posts:index'))
+        Post.objects.get(id=1).delete()
+        response_2 = self.authorized_client.get(reverse('posts:index'))
+        # После удаления поста из БД content не меняется - значит, кэш работает
+        self.assertEqual(response_1.content, response_2.content)
+        cache.clear()
+        response_3 = self.authorized_client.get(reverse('posts:index'))
+        # После очистки кэша content изменился
+        self.assertNotEqual(response_1.content, response_3.content)
 
 
 class PaginatorTestView(TestCase):

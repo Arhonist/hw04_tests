@@ -6,9 +6,9 @@
 {% endblock %} 
 
 {% block content %}
-{% cache 20 index_page page_obj user.is_authenticated %}
+{% cache 20 follow_page page_obj %}
 <main class="container py-5">
-  <h1>Последние обновления на сайте</h1>
+  <h1>Подписки</h1>
   {% include 'posts/includes/switcher.html' %}
   {% for post in page_obj %}
     {% include 'posts/post_card.html' %}
